@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<!--
+	Identity by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Dog Classifier by Ben Andrew</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{{ url_for('static', filename = 'assets/css/main.css') }}" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<noscript><link rel="stylesheet" href="{{ url_for('static', filename = 'assets/css/noscript.css') }}" /></noscript>
+		<script>
+		function preview_image(event) 
+		{
+		 var reader = new FileReader();
+		 reader.onload = function()
+		 {
+		  var output = document.getElementById('preview');
+		  output.src = reader.result;
+		 }
+		 reader.readAsDataURL(event.target.files[0]);
+		 
+		 if( document.getElementById("file").files.length == 1 ){
+			document.getElementById("submit").disabled = false;
+		 }
+		}
+		
+		server_message = '{{ text }}'
+		if(server_message.length != 0){
+			alert(server_message);
+		}
+		</script>
+	</head>
+	<body class="is-preload">
+			<div id="wrapper">
+					<section id="main">
+						<header>
+							<h1>Dog Classifier</h1>
+							<p>Welcome to an automated dog breed classification system using machine learning.<br>
+							For more information go to my <u><a href="#">github</a></u></p>
+							<br>
+							<form action="http://{{ address|safe }}/process" method="post" enctype="multipart/form-data">
+								<img id="preview" src="{{ url_for('static', filename = 'images/dog.jpg') }}" width="100%" alt="" />
+								<input id="file" name="file" type="file" accept="image/*" onchange="preview_image(event)" required>
+								<input type="submit" id="submit" onclick="document.getElementById('loading').hidden = false;" disabled>
+							</form>
+						</header>
+						<img src="{{ url_for('static', filename = 'images/loading.gif') }}" id="loading" width="20%" alt="" hidden>
+					</section>
+					<footer id="footer">
+						<ul class="icons">
+							<li><a href="#" class="icon brands fa-github">Github</a></li>
+						</ul>
+						<ul class="copyright">
+							<li>&copy; Ben Andrew</li><li>Template: <a href="http://html5up.net">HTML5 UP</a></li>
+						</ul>
+					</footer>
+			</div>
+			<script>
+				if ('addEventListener' in window) {
+					window.addEventListener('load', function() { document.body.className = document.body.className.replace(/\bis-preload\b/, ''); });
+					document.body.className += (navigator.userAgent.match(/(MSIE|rv:11\.0)/) ? ' is-ie' : '');
+				}
+			</script>
+	</body>
+</html>

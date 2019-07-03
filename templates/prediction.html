@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<!--
+	Identity by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Dog Classifier by Ben Andrew</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{{ url_for('static', filename = 'assets/css/main.css') }}" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<noscript><link rel="stylesheet" href="{{ url_for('static', filename = 'assets/css/noscript.css') }}" /></noscript>
+		<script>
+		function selectChange(){
+			val = document.getElementById("select").value;
+			if(val == "other"){
+				document.getElementById("other").type = "text";
+			} else {
+				document.getElementById("other").type = "hidden";
+			}
+		}
+		</script>
+	</head>
+	<body class="is-preload">
+			<div id="wrapper">
+					<section id="main">
+						<h1>Predictions</h1>
+						<ul>
+							{{ text|safe }}		
+						</ul>
+						<h2>
+							Which is correct?
+						</h2>
+						<form action="http://{{ address|safe }}/feedback" method="post">
+							{{ result|safe }}
+							<br>
+							<input type="hidden" placeholder="Other breed..." name="other" id="other" hidden>
+							<br>
+							<input type="submit">
+						</form>
+					</section>
+					<footer id="footer">
+						<ul class="icons">
+							<li><a href="#" class="icon brands fa-github">Github</a></li>
+						</ul>
+						<ul class="copyright">
+							<li>&copy; Ben Andrew</li><li>Template: <a href="http://html5up.net">HTML5 UP</a></li>
+						</ul>
+					</footer>
+			</div>
+			<script>
+				if ('addEventListener' in window) {
+					window.addEventListener('load', function() { document.body.className = document.body.className.replace(/\bis-preload\b/, ''); });
+					document.body.className += (navigator.userAgent.match(/(MSIE|rv:11\.0)/) ? ' is-ie' : '');
+				}
+			</script>
+	</body>
+</html>

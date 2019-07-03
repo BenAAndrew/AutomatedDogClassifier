@@ -1,0 +1,10 @@
+model.model
+uploads.txt
+/uploads
+/__pycache__
+/train/.ipynb_checkpoints
+label.pickle
+/train/cleaner/darknet
+/train/dataset
+/train/cleaner/log.txt
+/train/cleaner/ToBeDeleted.txt
