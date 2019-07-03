@@ -4,6 +4,7 @@ import numpy as np
 import pickle
 import cv2
 import fetchModel
+import os
 
 MODEL = fetchModel.details['model']
 LABELS = fetchModel.details['labels']
@@ -12,18 +13,22 @@ LABELS = fetchModel.details['labels']
 #minimum probability to be worth outputting a response for 
 MIN_PROB = 0.1
 IMG_DIMENSIONS = (96,96)
+DELETE_IMAGE = True
 
-def classify(image):
+def classify(imagePath):
 	global MODEL,LABELS,MIN_PROB,IMG_DIMENSIONS
 
 	# load the image
-	image = cv2.imread(image)
+	image = cv2.imread(imagePath)
 	
 	# pre-process the image for classification
 	image = cv2.resize(image, IMG_DIMENSIONS)
 	image = image.astype("float") / 255.0
 	image = img_to_array(image)
 	image = np.expand_dims(image, axis=0)
+
+	if DELETE_IMAGE:
+		os.remove(imagePath)
 
 	# load the trained model and the labels
 	model = load_model(MODEL)
