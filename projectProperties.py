@@ -3,7 +3,7 @@ import urllib.request
 import configparser
 
 config = configparser.ConfigParser()
-configName = "modelDetails.ini"
+configName = "projectProperties.ini"
 config.read(configName)
 
 details = dict()
@@ -13,12 +13,12 @@ for key in config:
 
 def downloadModel():
     print("Downloading model")
-    urllib.request.urlretrieve(details['modelurl'], details['model'])
+    urllib.request.urlretrieve(details['model_url'], details['model'])
     print("Downloaded model")
 
 def downloadLabels():
     print("Downloading labels")
-    urllib.request.urlretrieve(details['labelsurl'], details['labels'])
+    urllib.request.urlretrieve(details['labels_url'], details['labels'])
     print("Downloaded labels")
 
 def checkFiles():

@@ -2,14 +2,13 @@ import os
 import subprocess
 from classify import classify
 import time
-import fetchModel
+import projectProperties
 
-fetchModel.checkFiles()
+projectProperties.checkFiles()
 
-UPLOAD_FOLDER = 'uploads'
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
-TOTAL_PREDICTIONS = 3
-FEEDBACK_TEXT_FILE = "uploads.txt"
+UPLOAD_FOLDER = projectProperties.details['upload_folder']
+ALLOWED_EXTENSIONS = projectProperties.details['allowed_extensions'].split(",")
+FEEDBACK_TEXT_FILE = projectProperties.details['feedback_file']
 
 UPLOAD_FOLDER_ABSOLUTE = os.getcwd()+"/"+UPLOAD_FOLDER
 while '\\' in UPLOAD_FOLDER_ABSOLUTE:

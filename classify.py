@@ -3,17 +3,17 @@ from keras.models import load_model
 import numpy as np
 import pickle
 import cv2
-import fetchModel
+import projectProperties
 import os
 
-MODEL = fetchModel.details['model']
-LABELS = fetchModel.details['labels']
+MODEL = projectProperties.details['model']
+LABELS = projectProperties.details['labels']
 #MODEL = "model.model"
 #LABELS = "label.pickle"
 #minimum probability to be worth outputting a response for 
-MIN_PROB = 0.1
-IMG_DIMENSIONS = (96,96)
-DELETE_IMAGE = True
+MIN_PROB = float(projectProperties.details['min_relevant_probability'])
+IMG_DIMENSIONS = tuple([int(x) for x in projectProperties.details['img_dimensions'].split(",")])
+DELETE_IMAGE = bool(projectProperties.details['delete_image_after_prediction'])
 
 def classify(imagePath):
 	global MODEL,LABELS,MIN_PROB,IMG_DIMENSIONS
@@ -49,4 +49,6 @@ def classify(imagePath):
 		output.append("{}: {:.2f}%".format(label, predictions[label]))
 
 	print(output)
+	if len(output) == 0:
+		output.append("No classes found")
 	return output

@@ -1,22 +1,23 @@
 from flask import Flask, render_template, request, Markup
 from siteHandler import *
+import projectProperties
 
 app = Flask(__name__)
 
-MAX_MB = 50
+MAX_MB = int(projectProperties.details['max_image_size_mb'])
 app.config['UPLOAD_FOLDER'] = getUploadFolder()
 app.config['MAX_CONTENT_LENGTH'] = MAX_MB * 1024 * 1024
 
 #defines variables for server deployment or running locally (change for purpose)
-LOCAL = False
+LOCAL = bool(projectProperties.details['run_locally'])
 
 if LOCAL:
-    ip = 'localhost'
-    port = 5000
+    ip = projectProperties.details['local_ip']
+    port = int(projectProperties.details['local_port'])
     host = ip
 else:
-    ip = 'dogclassifier.herokuapp.com'
-    port = 80
+    ip = projectProperties.details['server_ip']
+    port = int(projectProperties.details['server_port'])
     host = '0.0.0.0'
 
 address = ip+":"+str(port)
