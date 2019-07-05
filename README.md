@@ -26,6 +26,11 @@ By using this new systems can be developed more quickly and with <b>less human b
 
 This project aims to take you through how to build a system like this, which can idenify image features and automatically classify whatever it is you wihs (in this example <b>what dog breed is found in an image</b>)
 
+<h2>Project variables</h2>
+Before I get into the project I just wanted to mention that the bulk of the project properties are held in the <b>projectProperties.ini</b> file. This is where you should change settings for the project such as your classification settings and resources. This is handled by the <b>projectProperties.py</b> script which will download web resources (for model & labels discussed later) and is imported by other python files to get access to these variables. 
+
+This is all important to know as you will likely be modifying the project for your needs, and through this file is the ideal place.
+
 <h2>Project breakdown</h2>
 <h3>Step 1: Building the dataset (imageFetcher.py)</h3>
 <ul>
