@@ -203,7 +203,7 @@ This tells flask when we render the page we will pass it a variable called <b>ad
   {{ text|safe }}		
 </ul>
 ```
-This returns the variable <b>text</b> into this position of the page. We use this to return multiple list items (<li>) for all the classes the prediction returned. That's all you need to know about the pages really but just bear in mind this is how flask works if you wish to create your own pages and output variables to them.
+This returns the variable <b>text</b> into this position of the page. We use this to return multiple list items (\<li\>) for all the classes the prediction returned. That's all you need to know about the pages really but just bear in mind this is how flask works if you wish to create your own pages and output variables to them.
   
 <h4>app</h4>
 The <b>app.py</b> file is where the page processing decisions are made. You can see we import the all important Flask library as well as <b>siteHandler.py</b> which we'll discuss after this. We firstly declare tha Flask app object and add configurations for the uploadFolder and maxLength. These variables as well as many others are set the the projectProperties.ini file.
