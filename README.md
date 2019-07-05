@@ -180,3 +180,34 @@ for (label, p) in zip(mlb.classes_, pred):
 and saved to a predictions dictionary if above the minimum probability discussed earlier. The function finsihes by sorting the dictionary by score (highest probability first) and saving it to a list with class and probability concatenated, which is what is returned 
 
 i.e. ["A: 60%","B: 30%"] may be a typically returned list where class 'A' was found to have a 60% likelyhood of being the class in the image, and class 'B' had a 30% probability.
+
+This is the work of the predictor done and how you use its result is up to you. In the next step I'll go through how I integrated this into a web app.
+
+<h2>Step 4: Web app</h2>
+The last step in the project (if you wish to) is to now wrap all of what we've done inside a web app, so we can share it with the world and allow users to test it out and give feedback.
+
+<h4>Website</h4>
+The bulk of the files in the repository are for this step but are not particually complex. The majority are files for our website with the pages in the <b>templates</b> folder and the assets (images & css) in the <b>static</b> folder.
+
+You may notice when looking at the webpages that they use this <b>{{double curly brace structure}}</b> in a few places. This is to do with <b>flask</b> which is the library which handles our website and allows us to integrate python into the backend of the site. The curly braces are recognised by flask as placeholders for some resource. For example;
+```
+href="{{ url_for('static', filename = 'assets/css/main.css') }}"
+```
+returns the directory for the main.css within the flask folder structuring into the page, so that it has css. This isn't so important as it's just to do with the webpage but there are also placeholders for where we want to place something in the page;
+```
+<form action="http://{{ address|safe }}/process" ...
+```
+This tells flask when we render the page we will pass it a variable called <b>address</b> into this position. We also tell it that the text is <b>safe</b> (second argument seperated by |) which means we tell flask not to escape this string. What this means is that for example if address was set to "localhost:5000" then action would be "http://localhost:5000/process" when the page is rendered. This example is found in index.html but if you look in prediction.html we see another;
+```
+<ul>
+  {{ text|safe }}		
+</ul>
+```
+This returns the variable <b>text</b> into this position of the page. We use this to return multiple list items (<li>) for all the classes the prediction returned. That's all you need to know about the pages really but just bear in mind this is how flask works if you wish to create your own pages and output variables to them.
+  
+<h4>app</h4>
+The <b>app.py</b> file is where the page processing decisions are made. You can see we import the all important Flask library as well as <b>siteHandler.py</b> which we'll discuss after this. We firstly declare tha Flask app object and add configurations for the uploadFolder and maxLength. These variables as well as many others are set the the projectProperties.ini file.
+
+After this a boolean LOCAL decides whether the run the app locally (through localhost on your machine) or on a server (as I'll explain later). For now make sure this value is <b>true in projectProperties.ini</b> because we always want to test locally first. This variable sets others to define the address variables decidng what ip and port the project runs on.
+
+Now we'll get into what happens when the user requests a page. if the user simply goes to the home address i.e. localhost:5000 this requests the root directory (/). We can define what
