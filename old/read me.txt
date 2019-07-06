@@ -1,2 +1,0 @@
-Old classify & sitehandler which passed data through terminal/ subporcess.
-Now calls function in classify directly

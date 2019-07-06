@@ -2,14 +2,28 @@ import os
 import urllib.request
 import configparser
 
+rootDirectoryName = "AutomatedDogClassifier"
+
+def getRelativeDirectoryForRoot():
+    currentDirectory = os.getcwd().split("/")
+    relativeDirectory = ""
+    for i in range(len(currentDirectory)-1,0,-1):
+        if currentDirectory[i] == rootDirectoryName:
+            break
+        else:
+            relativeDirectory += "../"
+    return relativeDirectory
+
 config = configparser.ConfigParser()
-configName = "projectProperties.ini"
+configName = getRelativeDirectoryForRoot()+"projectProperties.ini"
 config.read(configName)
 
 details = dict()
 for key in config:
     for prop in config[key]:
         details[prop] = config[key][prop]
+
+print("PROPERTIES LOADED")
 
 def downloadModel():
     print("Downloading model")

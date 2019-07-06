@@ -1,10 +1,13 @@
 import concurrent.futures
 import os
 
+#get elevated directory
+from ... import projectProperties 
+
 #ToBeDeleted text file path
 toBeDeletedFile = "ToBeDeleted.txt"
 #dataSet path
-dataSetPath = "../data"
+dataSetPath = "../"+projectProperties.details['dataset_name']
 #max similatenous threads for multithreading
 max_similtaneous_threads = 12
 
