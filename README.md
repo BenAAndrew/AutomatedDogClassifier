@@ -205,9 +205,57 @@ This tells flask when we render the page we will pass it a variable called <b>ad
 ```
 This returns the variable <b>text</b> into this position of the page. We use this to return multiple list items (\<li\>) for all the classes the prediction returned. That's all you need to know about the pages really but just bear in mind this is how flask works if you wish to create your own pages and output variables to them.
   
-<h4>app</h4>
-The <b>app.py</b> file is where the page processing decisions are made. You can see we import the all important Flask library as well as <b>siteHandler.py</b> which we'll discuss after this. We firstly declare tha Flask app object and add configurations for the uploadFolder and maxLength. These variables as well as many others are set the the projectProperties.ini file.
+<h4>App</h4>
+The <b>app.py</b> file is where the page processing decisions are made. You can see we import the all important Flask library as well as <b>siteHandler.py</b> which we'll discuss after this. We firstly declare the Flask app object and add configurations for the uploadFolder and maxLength. These variables as well as many others are set the the projectProperties.ini file.
 
 After this a boolean LOCAL decides whether the run the app locally (through localhost on your machine) or on a server (as I'll explain later). For now make sure this value is <b>true in projectProperties.ini</b> because we always want to test locally first. This variable sets others to define the address variables decidng what ip and port the project runs on.
 
-Now we'll get into what happens when the user requests a page. if the user simply goes to the home address i.e. localhost:5000 this requests the root directory (/). We can define what
+Now we'll get into what happens when the user requests a page. If the user simply goes to the home address i.e. localhost:5000 this requests the root directory (/). We can define what should happen when this request is made like this;
+```
+@app.route("/")
+def index():
+   return render_template("index.html", address=address)
+```
+This says that when someone requests the root directory (/) it should execute our index function. This function simply returns the index.html using <b>render_template</b> and also includes the address we're using (localhost:5000)
+
+The next path the site will use is <b>process</b>. This will be called when the user uploads an image to the page and presses submit, thus executing the form. This function may look very complex but once we break it down it shouldn't be too bad. Firstly we define the function and some variables 
+```
+@app.route('/process', methods = ['POST'])
+def processRequest():
+    print("PROCESS")
+    errorMessage = "File not found"
+    imageLocation = ""
+```
+You'll note that the method in the route is set to post as this is how our form submits it's data. The errorMessage variable is the message we'll output if there is any issue with the image, and imageLocation will be what is passed to our predictor if there is no error.
+```
+if 'file' in request.files:
+```
+This simply checks if there is an input called 'file' (name of our image input) found in the forms request inside files. 
+```
+try:
+  file = request.files['file']
+  if allowed_file(file.filename):
+```
+We use a try statement here as we are now trying to get the image and errors may occur. Firstly we save the passed image to a variable called file, and then we check the file is accepted using allowed file <b>(defined in siteHandler.py)</b>.
+```
+newFilename = str(str(int(time.time()))+"."+getExtension(file.filename))
+file.save(os.path.join(app.config['UPLOAD_FOLDER'], newFilename))
+imageLocation = UPLOAD_FOLDER_RELATIVE+"/"+newFilename
+```
+If this is the case the image is accepted. Firstly I rename the image to the current timestamp it's being uploaded at. This isn't entirely neccersairy but does avoid issues with duplicate names that may arise. The extension remains the same. I then save the image to the UPLOAD_FOLDER defined directory with its new name. os.path.join is required to get the absolute directory of the folder in the system. I then also define the relative directory which is what is passed to the predictor.
+The else and except under this simply outlines what type of error occured if there was one. If there was an error imageLocation will be empty so we can use that in a check to output an error;
+```
+if len(imageLocation) == 0:
+  return render_template('index.html', text=message)
+```
+This says that if imageLocation is empty then return index.html with the errorMessage being passed as a flask variable called text. <b>text</b> is added to a javascript alert message which is output if not empty (see index.html line 31). However if there is no error the following is execute;
+```
+predicitions = classifyImage(imageLocation)
+text = getClassifyHTML(predicitions)
+result = getFeedbackHTML(predicitions, imageLocation.split("/")[1])
+```
+This firstly calls classifyImage which uses <b>classify.py</b>, and then formats what is passed back using two other functions found in <b>siteHandler</b>. For know all you need to know is that this converts the result to HTML to be shown on the page.
+```
+return render_template('prediction.html', text=text,result=result,address=address)
+```
+This is what finally returns our prediction.html page with the text and result variables outputting the results of our prediction to the user.
